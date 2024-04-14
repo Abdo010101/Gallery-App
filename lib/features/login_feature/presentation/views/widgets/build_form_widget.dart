@@ -47,7 +47,7 @@ class BuildFormUser extends StatelessWidget {
                 bloc: loginCubit,
                 builder: (context, state) {
                   return state is LoginLoading
-                      ? Center(
+                      ? const Center(
                           child: CircularProgressIndicator(),
                         )
                       : Padding(
@@ -60,11 +60,14 @@ class BuildFormUser extends StatelessWidget {
                                       email: userName.text.toString(),
                                       password: passwrod.text.toString())
                                   .then((value) {
+                                loginCubit.tokenUser = value!.token!;
                                 if (value != null)
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => HomeScreen()));
+                                          builder: (context) => HomeScreen(
+                                                loginCubit: loginCubit,
+                                              )));
                               });
                             },
                           ),

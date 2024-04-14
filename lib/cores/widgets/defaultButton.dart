@@ -13,7 +13,7 @@ class DefalutButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        height: 40.sp,
+        height: 50.sp,
         decoration: BoxDecoration(
             borderRadius: BorderRadiusDirectional.circular(14),
             shape: BoxShape.rectangle,
@@ -21,7 +21,7 @@ class DefalutButton extends StatelessWidget {
         child: Center(
           child: Text(
             title,
-            style: Styles.style22,
+            style: Styles.style18,
           ),
         ),
       ),

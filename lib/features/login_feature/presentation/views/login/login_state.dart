@@ -10,3 +10,15 @@ class LoginLoading extends LoginState {}
 class Loginerror extends LoginState {}
 
 class LoginSucess extends LoginState {}
+
+class UploadImageLoading extends LoginState {}
+
+class UploadImageerror extends LoginState {}
+
+class UploadImageSucess extends LoginState {}
+
+class GetImageGalleryLoading extends LoginState {}
+
+class GetImageGalleryeerror extends LoginState {}
+
+class GetImageGallerySucess extends LoginState {}

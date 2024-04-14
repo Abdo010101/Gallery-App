@@ -32,7 +32,7 @@ class CheckoutApp extends StatelessWidget {
         create: (context) => getIt.get<LoginCubit>(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: HomeScreen(),
+          home: LoginScreen(),
         ),
       ),
     );

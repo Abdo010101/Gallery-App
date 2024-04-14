@@ -9,7 +9,7 @@ class DioHelper {
   );
   DioHelper();
 
-  static Future<Response> getDataWithToken(
+  Future<Response> getDataWithToken(
       {required String path,
       Map<String, dynamic>? query,
       required String tokenid}) async {

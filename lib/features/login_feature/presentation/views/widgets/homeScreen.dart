@@ -1,19 +1,31 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:payments/cores/utils/styles.dart';
 import 'package:payments/cores/widgets/button.dart';
 import 'package:payments/cores/widgets/defaultButton.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:payments/features/login_feature/domain/response/Models/get_gallery_data/get_gallery_data.dart';
+import 'package:payments/features/login_feature/presentation/views/login/login_cubit.dart';
 import 'package:payments/features/login_feature/presentation/views/widgets/buildDiolog.dart';
+import 'package:payments/features/login_feature/presentation/views/widgets/build_Grid_view_Gallery.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key, this.loginCubit});
 
+  final LoginCubit? loginCubit;
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,11 +85,15 @@ class HomeScreen extends StatelessWidget {
                         imageString: 'assets/images/Vector (1).png',
                         title: 'Upload',
                         onTap: () {
+                          BuildContext? diologContex;
                           showDialog(
                               context: context,
                               builder: (context) {
-                                return BuildDialogPermissionGallery();
-                              });
+                                diologContex = context;
+                                return BuildDialogPermissionGallery(
+                                  loginCubit: widget.loginCubit!,
+                                );
+                              }).then((value) {});
                         },
                       ),
                     ),
@@ -87,26 +103,20 @@ class HomeScreen extends StatelessWidget {
               SizedBox(
                 height: 20.h,
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: GridView.builder(
-                      itemCount: 30,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          mainAxisSpacing: 11.h,
-                          crossAxisSpacing: 10.h,
-                          childAspectRatio: 1,
-                          crossAxisCount: 3),
-                      itemBuilder: (context, index) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(25),
-                          child: Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage('assets/images/Group.png'),
-                          ),
-                        );
-                      }),
-                ),
+              BlocBuilder<LoginCubit, LoginState>(
+                bloc: widget.loginCubit!
+                  ..getDataFromGalleryCubit(widget.loginCubit!.tokenUser),
+                builder: (context, state) {
+                  if (state is GetImageGalleryeerror) {
+                    return const Center(child: Text("Error In Server "));
+                  }
+                  if (state is GetImageGallerySucess ||
+                      state is UploadImageSucess) {
+                    return BuildGridViewGallery(
+                        galleryData: widget.loginCubit!.getGalleryData!);
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                },
               ),
             ],
           ),
